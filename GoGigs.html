@@ -1,0 +1,196 @@
+!DOCTYPE html>
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="gogigs.css"/>
+
+
+
+	<!--IMPLIMENTING TABS-->
+	<script type="text/javascript">
+
+	var tabLinks = new Array();
+	var contentDivs = new Array();
+
+	function init() {
+
+	 // Grab the tab links and content divs from the page
+	 var tabListItems = document.getElementById('tabs').childNodes;
+	 for ( var i = 0; i < tabListItems.length; i++ ) {
+	 	if ( tabListItems[i].nodeName == "LI" ) {
+	 		var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+	 		var id = getHash( tabLink.getAttribute('href') );
+	 		tabLinks[id] = tabLink;
+	 		contentDivs[id] = document.getElementById( id );
+	 	}
+	 }
+
+	 // Assign onclick events to the tab links, and highlight the first tab
+	 var i = 0;
+
+	 for ( var id in tabLinks ) {
+	 	tabLinks[id].onclick = showTab;
+	 	tabLinks[id].onfocus = function() { this.blur() };
+	 	if ( i == 0 ) tabLinks[id].className = 'selected';
+	 	i++;
+	 }
+
+	 // Hide all content divs except the first
+	 var i = 0;
+
+	 for ( var id in contentDivs ) {
+	 	if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+	 	i++;
+	 }
+	}
+
+	function showTab() {
+		var selectedId = getHash( this.getAttribute('href') );
+
+	  // Highlight the selected tab, and dim all others.
+	  // Also show the selected content div, and hide all others.
+	  for ( var id in contentDivs ) {
+	  	if ( id == selectedId ) {
+	  		tabLinks[id].className = 'selected';
+	  		contentDivs[id].className = 'tabContent';
+	  	} 
+	  	else {
+	  		tabLinks[id].className = '';
+	  		contentDivs[id].className = 'tabContent hide';
+	  	}
+	  }
+
+    // Stop the browser following the link
+    return false;
+}
+
+function getFirstChildWithTagName( element, tagName ) {
+	for ( var i = 0; i < element.childNodes.length; i++ ) {
+		if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+	}
+}
+
+function getHash( url ) {
+	var hashPos = url.lastIndexOf ( '#' );
+	return url.substring( hashPos + 1 );
+}
+</script>
+
+<!---IMPLIMENTING MAP API-->
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+function initialize() {
+	var mapcanvas = document.getElementById('mapcanvas');
+	var map_options = {
+		center: new google.maps.LatLng(53.349638, -6.260192),
+		zoom: 15,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+	var map = new google.maps.Map(mapcanvas, map_options)
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+
+
+
+
+<title>
+	Find Local Events!
+</title>
+<style type="text/css"></style>
+</head>
+
+
+<body onload="init()">
+
+	<div id="header">
+		<p id="title">
+			GoGigs!
+		</p>
+	</div>
+
+	<div id="topbox"> 
+		<center>
+			<font face="Trebuchet MS">
+				<h3>Welcome to GoGigs.</h3>
+				<p>To get started, enter a date and time below.</p>
+
+
+					<form>
+						<select>
+							<option value="month">Month</option>
+						</select>
+					</form>	
+					<form>
+						<select>
+						  <option value="day">Day</option>
+					  </select>
+					</form>	
+					<form>
+						<select>
+							<option value="time">Time</option>
+						</select>
+					</form>	
+					
+
+					<p>On the right, you can select what type of event you want! Gig's, cinema or a nightclub!</p>
+					<p>Below, you can see where all the events take place! Enjoy!</p>
+				</font>
+			</center>
+		</div>
+
+		<!--MAP LOCATION-->
+		<div id="mapcanvas">
+		</div>
+
+		<!--LISTINGS BOX-->
+		<div id="listings" style="position: relative">
+			
+		<ul id="tabs">
+			<li><a href="#one" class="selected">Gigs</a></li>
+			<li><a href="#two">Cinema</a></li>
+			<li><a href="#three">Nights</a></li>
+			<li><a href="#four">Relevent</a></li>
+		</ul>
+
+		<div class="tabContent" id="one">
+			<h2>Gigs</h2>
+			<div>
+				<!-- INSERT CONCERT INFORMATION HERE -->
+				<p>Gig stuff.</p>
+				
+				
+			</div>
+		</div>
+
+		<div class="tabContent hide" id="two">
+			<h2>Cinema</h2>
+			<div>
+				<!--INSERT CINEMA INFORMATUION HERE-->
+				<p>Cinema Stuff</p>
+				<p>Test whatever</p>
+				
+				
+			</div>
+		</div>
+
+		<div class="tabContent hide" id="three">
+			<h2>Nights</h2>
+			<div>
+				<!--INSERT CLUB INFORMATION HERE-->
+				<p>Party Hard</p>			
+			</div>
+		</div>
+			
+		<div class="tabContent hide" id="four">
+			<h2>Relevent to you.</h2>
+			<div>
+				<p>Facebook stuff here. </p>			
+			</div>
+		</div>
+		</div>	
+
+
+
+	</body>
+	</html>
